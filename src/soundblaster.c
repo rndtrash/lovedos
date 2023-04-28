@@ -75,7 +75,7 @@ static const struct {
     {0xC0, 0xC2, 0xD4, 0xD6, 0xD8, 0x8F}, {0xC4, 0xC6, 0xD4, 0xD6, 0xD8, 0x8B},
     {0xC8, 0xCA, 0xD4, 0xD6, 0xD8, 0x89}, {0xCC, 0xCE, 0xD4, 0xD6, 0xD8, 0x8A}};
 
-static volatile int stopDma = 0;
+static volatile bool isrRunning = false;
 static uint16_t *sampleBuffer;
 static int sampleBufferSelector;
 static uint16_t baseAddress;
@@ -134,29 +134,26 @@ static int resetBlaster(void) {
 }
 
 static void soundblasterISR(void) {
+  isrRunning = true;
   outportb(baseAddress + BLASTER_MIXER_OUT_PORT,
            BLASTER_MIXER_INTERRUPT_STATUS);
   uint8_t status = inportb(baseAddress + BLASTER_MIXER_IN_PORT);
 
   if (status & BLASTER_16BIT_INTERRUPT) {
-    if (stopDma == 1) {
-      writeDSP(BLASTER_EXIT_AUTO_DMA);
-      stopDma = 2;
-    } else {
-      uint8_t *dst =
-          (uint8_t *)(sampleBuffer) + writePage * SAMPLE_BUFFER_SIZE / 2;
+    uint8_t *dst =
+        (uint8_t *)(sampleBuffer) + writePage * SAMPLE_BUFFER_SIZE / 2;
 
-      memcpy(dst, getSamples(), SAMPLE_BUFFER_SIZE / 2);
+    memcpy(dst, getSamples(), SAMPLE_BUFFER_SIZE / 2);
 
-      writePage = 1 - writePage;
-      inportb(baseAddress + BLASTER_INTERRUPT_ACKNOWLEDGE_16BIT);
-    }
+    writePage = 1 - writePage;
+    inportb(baseAddress + BLASTER_INTERRUPT_ACKNOWLEDGE_16BIT);
   }
 
   if (irq >= 8) {
     outportb(PIC2_COMMAND, PIC_EOI);
   }
   outportb(PIC1_COMMAND, PIC_EOI);
+  isrRunning = false;
 }
 
 static void setBlasterISR(void) {
@@ -349,8 +346,8 @@ static void resetBlasterISR(void) {
 }
 
 static void stopDMAOutput(void) {
-  stopDma = 1;
-  while (stopDma == 1) {
+  writeDSP(BLASTER_EXIT_AUTO_DMA);
+  while (isrRunning == 1) {
   }
 }
 
