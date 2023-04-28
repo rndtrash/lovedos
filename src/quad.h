@@ -1,4 +1,4 @@
-/** 
+/**
  * Copyright (c) 2017 rxi
  *
  * This library is free software; you can redistribute it and/or modify it
@@ -14,7 +14,5 @@ typedef struct {
   lua_Number x, y;
   lua_Number width, height;
 } quad_t;
-
-
 
 #endif

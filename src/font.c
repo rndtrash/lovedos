@@ -14,13 +14,12 @@
 #include "filesystem.h"
 #include "font.h"
 
-
 static const char *initFont(font_t *self, const void *data, int ptsize) {
   int i;
 
   /* Init font */
   stbtt_fontinfo font;
-  if ( !stbtt_InitFont(&font, data, 0) ) {
+  if (!stbtt_InitFont(&font, data, 0)) {
     return "could not load font";
   }
 
@@ -38,8 +37,8 @@ retry:
   /* Load glyphs */
   float s = stbtt_ScaleForMappingEmToPixels(&font, 1) /
             stbtt_ScaleForPixelHeight(&font, 1);
-  int res = stbtt_BakeFontBitmap(
-    data, 0, ptsize * s, self->image.data, w, h, 0, 128, self->glyphs);
+  int res = stbtt_BakeFontBitmap(data, 0, ptsize * s, self->image.data, w, h, 0,
+                                 128, self->glyphs);
 
   /* Retry with a larger image buffer if the buffer wasn't large enough */
   if (res < 0) {
@@ -64,7 +63,6 @@ retry:
   /* Return NULL for no error */
   return NULL;
 }
-
 
 const char *font_init(font_t *self, const char *filename, int ptsize) {
   const char *errmsg = NULL;
@@ -93,29 +91,24 @@ const char *font_init(font_t *self, const char *filename, int ptsize) {
   return NULL;
 
 fail:
-  if (fp) fclose(fp);
+  if (fp)
+    fclose(fp);
   filesystem_free(data);
   return errmsg;
 }
 
-
 const char *font_initEmbedded(font_t *self, int ptsize) {
-  #include "font_ttf.h"
+#include "font_ttf.h"
   return initFont(self, font_ttf, ptsize);
 }
 
-
-void font_deinit(font_t *self) {
-  image_deinit(&self->image);
-}
-
+void font_deinit(font_t *self) { image_deinit(&self->image); }
 
 extern int image_blendMode;
 extern int image_flip;
 
-void font_blit(font_t *self, pixel_t *buf, int bufw, int bufh,
-               const char *str, int dx, int dy
-) {
+void font_blit(font_t *self, pixel_t *buf, int bufw, int bufh, const char *str,
+               int dx, int dy) {
   const char *p = str;
   int x = dx;
   int y = dy;
@@ -130,11 +123,11 @@ void font_blit(font_t *self, pixel_t *buf, int bufw, int bufh,
       x = dx;
       y += self->height;
     } else {
-      stbtt_bakedchar *g = &self->glyphs[(int) (*p & 127)];
+      stbtt_bakedchar *g = &self->glyphs[(int)(*p & 127)];
       int w = g->x1 - g->x0;
       int h = g->y1 - g->y0;
-      image_blit(&self->image, buf, bufw, bufh,
-                 x + g->xoff, y + g->yoff, g->x0, g->y0, w, h);
+      image_blit(&self->image, buf, bufw, bufh, x + g->xoff, y + g->yoff, g->x0,
+                 g->y0, w, h);
       x += g->xadvance;
     }
     p++;

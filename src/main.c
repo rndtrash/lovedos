@@ -23,7 +23,6 @@
 #include "palette.h"
 #include "package.h"
 
-
 static lua_State *L;
 
 static void deinit(void) {
@@ -33,11 +32,10 @@ static void deinit(void) {
   keyboard_deinit();
   lua_close(L);
   filesystem_deinit();
-  if ( dmt_usage() > 0 ) {
+  if (dmt_usage() > 0) {
     dmt_dump(stdout);
   }
 }
-
 
 static int onLuaPanic(lua_State *L) {
   vga_deinit();
@@ -46,13 +44,12 @@ static int onLuaPanic(lua_State *L) {
   return 0;
 }
 
-
 int luaopen_love(lua_State *L);
 
 int main(int argc, char **argv) {
 
   /* Handle package command */
-  if ( package_run(argc, argv) == PACKAGE_ESUCCESS ) {
+  if (package_run(argc, argv) == PACKAGE_ESUCCESS) {
     exit(EXIT_SUCCESS);
   }
 
@@ -83,16 +80,15 @@ int main(int argc, char **argv) {
   }
   lua_pop(L, 1);
 
-  /* Init embedded scripts */
-  #include "nogame_lua.h"
-  #include "boot_lua.h"
+/* Init embedded scripts */
+#include "nogame_lua.h"
+#include "boot_lua.h"
   struct {
-    const char *name, *data; int size;
-  } items[] = {
-    { "nogame.lua",   nogame_lua,   sizeof(nogame_lua)  },
-    { "boot.lua",     boot_lua,     sizeof(boot_lua)    },
-    { NULL, NULL, 0 }
-  };
+    const char *name, *data;
+    int size;
+  } items[] = {{"nogame.lua", nogame_lua, sizeof(nogame_lua)},
+               {"boot.lua", boot_lua, sizeof(boot_lua)},
+               {NULL, NULL, 0}};
   int i;
   for (i = 0; items[i].name; i++) {
     int err = luaL_loadbuffer(L, items[i].data, items[i].size, items[i].name);

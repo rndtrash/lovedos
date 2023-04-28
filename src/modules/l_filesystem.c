@@ -8,7 +8,6 @@
 #include "filesystem.h"
 #include "luaobj.h"
 
-
 int l_filesystem_mount(lua_State *L) {
   const char *path = luaL_checkstring(L, 1);
   int err = filesystem_mount(path);
@@ -20,7 +19,6 @@ int l_filesystem_mount(lua_State *L) {
   lua_pushboolean(L, 1);
   return 1;
 }
-
 
 int l_filesystem_unmount(lua_State *L) {
   const char *path = luaL_checkstring(L, 1);
@@ -34,27 +32,23 @@ int l_filesystem_unmount(lua_State *L) {
   return 1;
 }
 
-
 int l_filesystem_exists(lua_State *L) {
   const char *filename = luaL_checkstring(L, 1);
-  lua_pushboolean( L, filesystem_exists(filename) );
+  lua_pushboolean(L, filesystem_exists(filename));
   return 1;
 }
-
 
 int l_filesystem_isFile(lua_State *L) {
   const char *filename = luaL_checkstring(L, 1);
-  lua_pushboolean( L, filesystem_isFile(filename) );
+  lua_pushboolean(L, filesystem_isFile(filename));
   return 1;
 }
-
 
 int l_filesystem_isDirectory(lua_State *L) {
   const char *filename = luaL_checkstring(L, 1);
-  lua_pushboolean( L, filesystem_isDirectory(filename) );
+  lua_pushboolean(L, filesystem_isDirectory(filename));
   return 1;
 }
-
 
 int l_filesystem_read(lua_State *L) {
   const char *filename = luaL_checkstring(L, 1);
@@ -68,7 +62,6 @@ int l_filesystem_read(lua_State *L) {
   return 1;
 }
 
-
 int l_filesystem_setWriteDir(lua_State *L) {
   const char *path = luaL_checkstring(L, 1);
   int err = filesystem_setWriteDir(path);
@@ -80,7 +73,6 @@ int l_filesystem_setWriteDir(lua_State *L) {
   lua_pushboolean(L, 1);
   return 1;
 }
-
 
 int l_filesystem_write(lua_State *L) {
   size_t sz;
@@ -94,18 +86,17 @@ int l_filesystem_write(lua_State *L) {
   return 1;
 }
 
-
 int luaopen_filesystem(lua_State *L) {
   luaL_Reg reg[] = {
-    { "mount",        l_filesystem_mount        },
-    { "unmount",      l_filesystem_unmount      },
-    { "exists",       l_filesystem_exists       },
-    { "isFile",       l_filesystem_isFile       },
-    { "isDirectory",  l_filesystem_isDirectory  },
-    { "read",         l_filesystem_read         },
-    { "setWriteDir",  l_filesystem_setWriteDir  },
-    { "write",        l_filesystem_write        },
-    { 0, 0 },
+      {"mount", l_filesystem_mount},
+      {"unmount", l_filesystem_unmount},
+      {"exists", l_filesystem_exists},
+      {"isFile", l_filesystem_isFile},
+      {"isDirectory", l_filesystem_isDirectory},
+      {"read", l_filesystem_read},
+      {"setWriteDir", l_filesystem_setWriteDir},
+      {"write", l_filesystem_write},
+      {0, 0},
   };
   luaL_newlib(L, reg);
   return 1;

@@ -19,31 +19,34 @@ static struct {
   unsigned writei, readi;
 } events;
 
-
-const char* event_typestr(int type) {
+const char *event_typestr(int type) {
   switch (type) {
-    case EVENT_QUIT               : return "quit";
-    case EVENT_KEYBOARD_PRESSED   : return "keypressed";
-    case EVENT_KEYBOARD_RELEASED  : return "keyreleased";
-    case EVENT_KEYBOARD_TEXTINPUT : return "textinput";
-    case EVENT_MOUSE_MOVED        : return "mousemoved";
-    case EVENT_MOUSE_PRESSED      : return "mousepressed";
-    case EVENT_MOUSE_RELEASED     : return "mousereleased";
+  case EVENT_QUIT:
+    return "quit";
+  case EVENT_KEYBOARD_PRESSED:
+    return "keypressed";
+  case EVENT_KEYBOARD_RELEASED:
+    return "keyreleased";
+  case EVENT_KEYBOARD_TEXTINPUT:
+    return "textinput";
+  case EVENT_MOUSE_MOVED:
+    return "mousemoved";
+  case EVENT_MOUSE_PRESSED:
+    return "mousepressed";
+  case EVENT_MOUSE_RELEASED:
+    return "mousereleased";
   }
   return "?";
 }
-
 
 void event_push(event_t *e) {
   events.buffer[events.writei++ & BUFFER_MASK] = *e;
 }
 
-
 void event_pump(void) {
   keyboard_update();
   mouse_update();
 }
-
 
 int event_poll(event_t *e) {
   if (events.readi != events.writei) {

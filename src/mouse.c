@@ -17,13 +17,11 @@ int mouse_x, mouse_y;
 int mouse_lastX, mouse_lastY;
 int mouse_buttonStates[MOUSE_BUTTON_MAX];
 
-
 void mouse_init(void) {
   union REGS regs = {};
   int86(0x33, &regs, &regs);
   mouse_inited = regs.x.ax ? 1 : 0;
 }
-
 
 void mouse_update(void) {
   if (!mouse_inited) {
@@ -75,18 +73,8 @@ void mouse_update(void) {
   }
 }
 
+int mouse_isDown(int button) { return mouse_buttonStates[button]; }
 
+int mouse_getX(void) { return mouse_x; }
 
-int mouse_isDown(int button) {
-  return mouse_buttonStates[button];
-}
-
-
-int mouse_getX(void) {
-  return mouse_x;
-}
-
-
-int mouse_getY(void) {
-  return mouse_y;
-}
+int mouse_getY(void) { return mouse_y; }

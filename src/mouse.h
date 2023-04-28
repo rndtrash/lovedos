@@ -15,7 +15,6 @@ enum {
   MOUSE_BUTTON_MAX
 };
 
-
 void mouse_init(void);
 void mouse_update(void);
 int mouse_isDown(int button);

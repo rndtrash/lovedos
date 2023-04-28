@@ -15,7 +15,6 @@
 
 #include "package.h"
 
-
 static void error(const char *fmt, ...) {
   va_list argp;
   printf("Package error: ");
@@ -26,7 +25,6 @@ static void error(const char *fmt, ...) {
   exit(EXIT_FAILURE);
 }
 
-
 static int tar_stream_write(mtar_t *tar, const void *data, unsigned size) {
   unsigned res = fwrite(data, 1, size, tar->stream);
   if (res != size) {
@@ -35,13 +33,12 @@ static int tar_stream_write(mtar_t *tar, const void *data, unsigned size) {
   return MTAR_ESUCCESS;
 }
 
-
 static void concat(char *dst, int dstsz, ...) {
   const char *s;
   va_list argp;
   int i = 0;
   va_start(argp, dstsz);
-  while ( (s = va_arg(argp, const char*)) ) {
+  while ((s = va_arg(argp, const char *))) {
     while (*s) {
       dst[i++] = *s++;
       if (i == dstsz) {
@@ -53,17 +50,15 @@ static void concat(char *dst, int dstsz, ...) {
   va_end(argp);
 }
 
-
-static
-void concat_path(char *dst, int dstsz, const char *dir, const char *filename) {
+static void concat_path(char *dst, int dstsz, const char *dir,
+                        const char *filename) {
   int dirlen = strlen(dir);
-  if ( dir[dirlen - 1] == '/' || *dir == '\0' ) {
+  if (dir[dirlen - 1] == '/' || *dir == '\0') {
     concat(dst, dstsz, dir, filename, NULL);
   } else {
     concat(dst, dstsz, dir, "/", filename, NULL);
   }
 }
-
 
 static void write_file(mtar_t *tar, const char *inname, const char *outname) {
   FILE *fp = fopen(inname, "rb");
@@ -86,7 +81,7 @@ static void write_file(mtar_t *tar, const char *inname, const char *outname) {
 
   /* Write file */
   int chr;
-  while ( (chr = fgetc(fp)) != EOF ) {
+  while ((chr = fgetc(fp)) != EOF) {
     unsigned char byte = chr;
     mtar_write_data(tar, &byte, 1);
   }
@@ -94,7 +89,6 @@ static void write_file(mtar_t *tar, const char *inname, const char *outname) {
   /* Close file and return ok */
   fclose(fp);
 }
-
 
 static void write_dir(mtar_t *tar, const char *indir, const char *outdir) {
   char inbuf[256];
@@ -117,7 +111,7 @@ static void write_dir(mtar_t *tar, const char *indir, const char *outdir) {
   }
 
   /* Write files */
-  while ( (ep = readdir(dir)) ) {
+  while ((ep = readdir(dir))) {
     /* Skip `.` and `..` */
     if (!strcmp(ep->d_name, ".") || !strcmp(ep->d_name, "..")) {
       continue;
@@ -138,8 +132,8 @@ static void write_dir(mtar_t *tar, const char *indir, const char *outdir) {
   closedir(dir);
 }
 
-
-void package_make(const char *indir, const char *outfile, const char *exefile, int type) {
+void package_make(const char *indir, const char *outfile, const char *exefile,
+                  int type) {
   /* Open file */
   FILE *fp = fopen(outfile, "wb");
   if (!fp) {
@@ -153,7 +147,7 @@ void package_make(const char *indir, const char *outfile, const char *exefile, i
       error("couldn't open .exe file");
     }
     int chr;
-    while ( (chr = fgetc(exefp)) != EOF ) {
+    while ((chr = fgetc(exefp)) != EOF) {
       fputc(chr, fp);
     }
     fclose(exefp);
@@ -182,13 +176,12 @@ void package_make(const char *indir, const char *outfile, const char *exefile, i
   fclose(fp);
 }
 
-
 int package_run(int argc, char **argv) {
   /* Check for `--pack` argument; return failure if it isn't present */
   if (argc < 2) {
     return PACKAGE_EFAILURE;
   }
-  if ( strcmp(argv[1], "--pack") != 0 && strcmp(argv[1], "--PACK") != 0 ) {
+  if (strcmp(argv[1], "--pack") != 0 && strcmp(argv[1], "--PACK") != 0) {
     return PACKAGE_EFAILURE;
   }
 
@@ -199,7 +192,7 @@ int package_run(int argc, char **argv) {
 
   /* Set package type based on file extension */
   int type = PACKAGE_TTAR;
-  if ( strstr(argv[3], ".exe") || strstr(argv[3], ".EXE") ) {
+  if (strstr(argv[3], ".exe") || strstr(argv[3], ".EXE")) {
     type = PACKAGE_TEXE;
   }
 
