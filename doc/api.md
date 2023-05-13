@@ -10,6 +10,7 @@
 * [love.filesystem](#lovefilesystem)
 * [love.audio](#loveaudio)
 * [love.event](#loveevent)
+* [love.vgm](#lovevgm)
 
 ##### [Objects](#objects-1)
 * [Image](#image)
@@ -37,6 +38,18 @@ Returns the operating system which LoveDOS is running on.
 Returns the amount of memory in kilobytes which is being used by LoveDOS. This
 includes the memory used by both the loaded assets and lua.
 
+
+### love.vgm
+VGM OPL2 playback
+
+##### love.vgm.VgmLoad(filename)
+Load (or replace) a VGM.
+
+##### love.vgm.VgmPlay()
+Start VGM playback.
+
+##### love.vgm.VgmStop()
+Stop VGM playback.
 
 ### love.graphics
 Provides functions for drawing lines, shapes, text and images.

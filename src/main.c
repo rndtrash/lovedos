@@ -22,11 +22,15 @@
 #include "image.h"
 #include "palette.h"
 #include "package.h"
+#include "vgm.h"
+#include "lib/pctimer/gccint8.h"
 
 static lua_State *L;
 
 static void deinit(void) {
   /* Deinit and clear up everything. Called at exit */
+  shutdown_vgm();
+  pctimer_exit();
   audio_deinit();
   vga_deinit();
   keyboard_deinit();
@@ -60,6 +64,8 @@ int main(int argc, char **argv) {
   palette_init();
   keyboard_init();
   mouse_init();
+  pctimer_init(1000);
+  init_vgm();
 
   /* Init lua */
   L = luaL_newstate();

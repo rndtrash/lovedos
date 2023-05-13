@@ -7,7 +7,7 @@
 
 #include "luaobj.h"
 
-#define LOVE_VERSION "0.42.23"
+#define LOVE_VERSION "0.42.23.1"
 
 int l_love_getVersion(lua_State *L) {
   lua_pushstring(L, LOVE_VERSION);
@@ -26,6 +26,7 @@ int luaopen_audio(lua_State *L);
 int luaopen_timer(lua_State *L);
 int luaopen_keyboard(lua_State *L);
 int luaopen_mouse(lua_State *L);
+int luaopen_vgm(lua_State *L);
 
 int luaopen_love(lua_State *L) {
   int i;
@@ -53,6 +54,7 @@ int luaopen_love(lua_State *L) {
     int (*fn)(lua_State *L);
   } mods[] = {
       {"system", luaopen_system},
+      {"vgm", luaopen_vgm},
       {"event", luaopen_event},
       {"filesystem", luaopen_filesystem},
       {"graphics", luaopen_graphics},
