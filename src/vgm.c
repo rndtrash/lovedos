@@ -117,7 +117,6 @@ typedef struct {
 
 static volatile uint8_t *vgm = NULL;
 static volatile vgm_t *vgm_header = NULL;
-static volatile bool vgm_playback = false;
 static volatile uint8_t *vgm_data = NULL;
 static volatile uint32_t vgm_pos = 0;
 static volatile uint32_t vgm_end = 0;
@@ -284,14 +283,12 @@ void VgmPlay() {
   if (vgm_data) {
     vgm_pos = 0;
     vgm_wait = 0;
-    vgm_playback = true;
 
     pctimer_set_hook(vgm_int);
   }
 }
 
 void VgmStop() {
-  vgm_playback = false;
   pctimer_set_hook(NULL);
 
   vgm_opl_reset();
@@ -303,7 +300,6 @@ static void VgmDiscard() {
     filesystem_free((void *)vgm);
   }
   vgm = NULL;
-  vgm_playback = false;
   vgm_pos = 0;
   vgm_end = 0;
   vgm_wait = 0;
@@ -361,7 +357,6 @@ void init_vgm() {
   // lock down
   LOCK_FUNCTION(vgm_int);
   LOCK_FUNCTION(vgm_opl_write);
-  LOCK_VARIABLE(vgm_playback);
   LOCK_VARIABLE(vgm_pos);
   LOCK_VARIABLE(vgm_data);
   LOCK_VARIABLE(vgm_wait);
