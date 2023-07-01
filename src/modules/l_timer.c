@@ -6,10 +6,11 @@
  */
 
 #include <dos.h>
-#include <time.h>
 #include "luaobj.h"
 #include "image.h"
 #include "vga.h"
+#include "lib/pctimer/gccint8.h"
+#include "main.h"
 
 long long timer_lastStep;
 double timer_lastDt;
@@ -21,13 +22,13 @@ double timer_avgTimer;
 
 int l_timer_step(lua_State *L) {
   /* Do delta */
-  long long now;
+  unsigned long now;
   /* Sometimes a call to uclock() will return a slightly earlier time than the
    * previous call, resulting in a negative delta time. The below loop keeps
    * trying for a proper value if this occurs. */
   do {
-    now = uclock();
-    timer_lastDt = (now - timer_lastStep) / (double)UCLOCKS_PER_SEC;
+    now = pctimer_get_ticks();
+    timer_lastDt = (now - timer_lastStep) / (double)TICKS_PER_SEC;
   } while (timer_lastDt < 0);
   timer_lastStep = now;
   /* Do average */
@@ -64,7 +65,7 @@ int l_timer_getFPS(lua_State *L) {
 }
 
 int l_timer_getTime(lua_State *L) {
-  lua_pushnumber(L, uclock() / (double)UCLOCKS_PER_SEC);
+  lua_pushnumber(L, pctimer_get_ticks() / (double)TICKS_PER_SEC);
   return 1;
 }
 

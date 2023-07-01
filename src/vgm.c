@@ -34,9 +34,10 @@ VGM specs are at https://vgmrips.net/wiki/VGM_Specification
 #include "vgm.h"
 #include "lib/pctimer/gccint8.h"
 #include "filesystem.h"
+#include "main.h"
 
 #define VGM_RESOLUTION 44100
-#define VGM_FACTOR 44
+#define VGM_FACTOR (VGM_RESOLUTION / TICKS_PER_SEC)
 #define VGM_OPL_ADDR 0x388
 #define VGM_OPL_DATA 0x389
 

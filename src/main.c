@@ -24,6 +24,7 @@
 #include "package.h"
 #include "vgm.h"
 #include "lib/pctimer/gccint8.h"
+#include "main.h"
 
 static lua_State *L;
 
@@ -64,7 +65,7 @@ int main(int argc, char **argv) {
   palette_init();
   keyboard_init();
   mouse_init();
-  pctimer_init(1000);
+  pctimer_init(TICKS_PER_SEC);
   init_vgm();
 
   /* Init lua */
