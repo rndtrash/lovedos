@@ -1,6 +1,16 @@
 cmake_minimum_required(VERSION 3.20)
 project(lovedos C)
 
+option(
+    LUA_LOCALE
+    "Implement the os.setlocale function in Lua's standard library. \
+Disabling this option shaves off about 5 KiB from the executable's size, but in return makes os.setlocale always return nil."
+    ON)
+
+if (LUA_LOCALE)
+    add_definitions(-DLUA_LOCALE)
+endif()
+
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -Wall -s -Wno-misleading-indentation")
 
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
