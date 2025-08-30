@@ -6,30 +6,23 @@ build the project's source if you want to make changes to the project.
 
 ## Requirements
 LoveDOS depends on the following being installed before building:
-* **[Python2.7](https://www.python.org/)** is required by build.py, the build
-  script
+* **CMake 3.20** is required to generate the Makefiles
 * **[DJGPP cross compiler](https://github.com/andrewwutw/build-djgpp)** 
   is required to compile the source files
 
 
 ## Building
-To compile you should clone the git repository or
-[download the .zip](https://github.com/rxi/lovedos/archive/master.zip) of it.
-Once this is done you should open the build.py file in an editor and check to
-make sure the COMPILER variable is set to the correct command as to run DJGPP's
-gcc executable; change the COMPILER variable's value if it is not set to the
-correct value.
 
-Assuming the COMPILER variable is correctly set the script should be run:
-```
-./build.py
-```
- The script will output the following line when it starts:
-```
-compiling...
-```
-Within a minute the script should finish and display the following line:
-```
-done
-```
-There should now be a file named "love.exe" in the "bin/" directory
+First, make sure you have DJGPP binaries in the path. More on that in
+the [build-djgpp's README](https://github.com/andrewwutw/build-djgpp/?tab=readme-ov-file#using-djgpp-compiler).
+
+To compile you should clone the Git repository or
+[download the .zip](https://github.com/rndtrash/lovedos/archive/master.zip) of it.
+
+Once this is done you should open a terminal in the folder with the source code and
+execute the following commands:
+
+ 1. `cmake -B build --toolchain=DJGPP.cmake` (generates the build files)
+ 2. `cmake --build build` (will start the compilation process)
+
+There should now be a file named `love.exe` in the `build/` directory
