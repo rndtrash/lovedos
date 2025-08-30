@@ -1,0 +1,28 @@
+name: Build LoveDOS
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/volkertb/debian-djgpp:latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: apt-get update && apt-get install -y cmake
+
+      - name: Setup the DJGPP environment and Configure CMake
+        run: source /opt/djgpp/setenv && cmake -B build --toolchain=DJGPP.cmake
+
+      - name: Compile LoveDOS
+        run: cmake --build build
+
+      - name: Upload love.exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: love
+          path: build/love.exe

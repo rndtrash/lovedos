@@ -6,7 +6,6 @@ set(CMAKE_SYSTEM_PROCESSOR x86)
 set(CMAKE_C_COMPILER i586-pc-msdosdjgpp-gcc)
 set(CMAKE_CXX_COMPILER i586-pc-msdosdjgpp-g++)
 
-# where is the target environment
 # set(CMAKE_FIND_ROOT_PATH $ENV{DJDIR})
 
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
