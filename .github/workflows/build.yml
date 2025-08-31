@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - run: apt-get update && apt-get install -y cmake
+      - run: apt-get update && apt-get install -y cmake libfl2
 
       - name: Setup the DJGPP environment and Configure CMake
         run: source /opt/djgpp/setenv && cmake -B build --toolchain=DJGPP.cmake
