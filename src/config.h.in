@@ -1,0 +1,1 @@
+#define LOVE_VERSION "@LoveDOS_VERSION@"

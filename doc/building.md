@@ -6,7 +6,7 @@ build the project's source if you want to make changes to the project.
 
 ## Requirements
 LoveDOS depends on the following being installed before building:
-* **CMake 3.20** is required to generate the Makefiles
+* **CMake 3.23** is required to generate the Makefiles
 * **[DJGPP cross compiler](https://github.com/andrewwutw/build-djgpp)** 
   is required to compile the source files
 

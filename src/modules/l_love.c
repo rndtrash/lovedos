@@ -6,8 +6,7 @@
  */
 
 #include "luaobj.h"
-
-#define LOVE_VERSION "0.42.23.1"
+#include <config.h>
 
 int l_love_getVersion(lua_State *L) {
   lua_pushstring(L, LOVE_VERSION);

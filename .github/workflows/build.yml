@@ -25,4 +25,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: love
-          path: build/love.exe
+          path: build/src/love.exe
