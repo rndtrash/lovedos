@@ -31,8 +31,6 @@ const char *image_init(image_t *self, const char *filename) {
   /* Loads an image file into the struct and inits the mask */
   const char *errmsg = NULL;
   void *filedata = NULL;
-  unsigned char *data32 = NULL;
-  memset(self, 0, sizeof(*self));
 
   /* Load file data */
   int size;
@@ -43,54 +41,66 @@ const char *image_init(image_t *self, const char *filename) {
   }
 
   /* Load 32bit image data */
+  errmsg = image_initData(self, filedata, size);
+  if (errmsg) {
+    goto fail;
+  }
+
+  /* Free file data, return error if there is any */
+fail:
+  filesystem_free(filedata);
+
+  return errmsg;
+}
+
+const char *image_initData(image_t *self, const void *data, int size) {
+  /* Loads an image file into the struct and inits the mask */
+  const char *errmsg = NULL;
+  unsigned char *data32 = NULL;
+  memset(self, 0, sizeof(*self));
+
+  /* Load 32bit image data */
   int width, height, n;
-  data32 = stbi_load_from_memory(filedata, size, &width, &height, &n, 4);
+  data32 = stbi_load_from_memory(data, size, &width, &height, &n, 4);
   if (!data32) {
     errmsg = "could not load image file";
     goto fail;
   }
-
-  /* Free file data */
-  filesystem_free(filedata);
-  filedata = NULL;
 
   /* Set dimensions and allocate memory */
   int sz = width * height;
   self->width = width;
   self->height = height;
   self->data = dmt_malloc(sz);
+  self->mask = dmt_malloc(sz);
 
   /* Load pixels into struct, converting 32bit to 8bit paletted */
   int i;
-  for (i = 0; i < width * height; i++) {
+  for (i = 0; i < sz; i++) {
     unsigned char *p = data32 + i * 4;
     int r = p[0];
     int g = p[1];
     int b = p[2];
     int a = p[3];
-    int idx = palette_colorToIdx(r, g, b);
-    if (idx < 0) {
-      errmsg = "color palette exhausted: use fewer unique colors";
-      goto fail;
+    // Don't waste the palette space on transparent colors
+    if (a >= 127) {
+      int idx = palette_colorToIdx(r, g, b);
+      if (idx < 0) {
+        errmsg = "color palette exhausted: use fewer unique colors";
+        goto fail;
+      }
+      self->data[i] = idx;
+      self->mask[i] = 0x00;
+    } else {
+      self->data[i] = 0;
+      self->mask[i] = 0xFF;
     }
-    self->data[i] = (a >= 127) ? idx : 0;
   }
 
-  /* Init mask */
-  self->mask = dmt_malloc(sz);
-  for (i = 0; i < sz; i++) {
-    self->mask[i] = (self->data[i] == 0) ? 0xFF : 0x00;
-  }
-
-  /* Free 32bit pixel data, return NULL for no error */
-  free(data32);
-  data32 = NULL;
-
-  return NULL;
-
+  /* Free 32bit pixel data, return error if there is any */
 fail:
-  filesystem_free(filedata);
   free(data32);
+
   return errmsg;
 }
 

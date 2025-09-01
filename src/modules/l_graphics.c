@@ -462,6 +462,7 @@ int l_image_new(lua_State *L);
 int l_image_newCanvas(lua_State *L);
 int l_quad_new(lua_State *L);
 int l_font_new(lua_State *L);
+int l_font_newImage(lua_State *L);
 
 int luaopen_graphics(lua_State *L) {
   luaL_Reg reg[] = {
@@ -491,6 +492,7 @@ int luaopen_graphics(lua_State *L) {
       {"newCanvas", l_image_newCanvas},
       {"newQuad", l_quad_new},
       {"newFont", l_font_new},
+      {"newImageFont", l_font_newImage},
       {0, 0},
   };
   luaL_newlib(L, reg);

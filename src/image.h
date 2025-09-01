@@ -43,6 +43,7 @@ void image_setBlendMode(int mode);
 void image_setFlip(int mode);
 
 const char *image_init(image_t *self, const char *filename);
+const char *image_initData(image_t *self, const void *data, int size);
 void image_initBlank(image_t *, int, int);
 void image_blit(image_t *self, pixel_t *buf, int bufw, int bufh, int dx, int dy,
                 int sx, int sy, int sw, int sh);

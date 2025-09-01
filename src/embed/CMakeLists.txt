@@ -1,8 +1,13 @@
 set(EMBED_FILES
     boot.lua
     nogame.lua
-    font.ttf
 )
+
+if(LOVE_TTF)
+    list(APPEND EMBED_FILES font.ttf)
+else()
+    list(APPEND EMBED_FILES font.png)
+endif()
 
 list(TRANSFORM EMBED_FILES PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/")
 

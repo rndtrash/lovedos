@@ -156,6 +156,12 @@ Creates and returns a new quad.
 Creates and returns a new font. `filename` should be the name of a ttf file and
 `ptsize` its size. If no `filename` is provided the built in font is used.
 
+##### love.graphics.newImageFont( filename, glyphs[, extraspacing] )
+Creates and returns a new bitmap font. `filename` should be the name of an image file and
+glyphs the string with all characters of font in order.
+
+More on the format used by LÖVE: https://love2d.org/wiki/ImageFontFormat
+
 ##### love.graphics.present()
 Flips the current screen buffer with the displayed screen buffer. This is
 called automatically after the `love.draw()` callback.
