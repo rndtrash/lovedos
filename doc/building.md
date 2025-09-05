@@ -26,3 +26,30 @@ execute the following commands:
  2. `cmake --build build` (will start the compilation process)
 
 There should now be a file named `love.exe` in the `build/` directory
+
+## Customizing
+
+If you want to disable the features that you don't use in order to save up on memory,
+this project provides a set of options to customize your build of LoveDOS:
+
+|Name|Description|Default|
+|---|---|---|
+|LUA_LOCALE|Implement the os.setlocale function in Lua's standard library. Disabling this option shaves off about 5 KiB from the executable's size, but in return makes `os.setlocale` always return `nil`.|ON|
+|LOVE_TTF|Implement vector fonts parser and renderer in LOVE engine.<br>Disabling this function might free up to 40 KiB from the executable's size, but all calls to `love.graphics.newFont` will return `nil`.|ON|
+|STBI_JPEG|Enable JPEG support for `love.graphics.newImage`. Adds about 20 KiB to the executable's size.|ON|
+|STBI_PNG|Enable PNG support for `love.graphics.newImage`. +14 KiB|ON|
+|STBI_BMP|Enable BMP support for `love.graphics.newImage`. +6 KiB|ON|
+|STBI_PSD|Enable PSD support (composited view only, no extra channels, 8/16 bit-per-channel) for `love.graphics.newImage`. +2 KiB|ON|
+|STBI_TGA|Enable TGA support for `love.graphics.newImage`. +5 KiB|ON|
+|STBI_GIF|Enable GIF support for `love.graphics.newImage`. +6 KiB|ON|
+|STBI_HDR|Enable HDR support for `love.graphics.newImage`. +5 KiB|ON|
+|STBI_PIC|Enable PIC support for `love.graphics.newImage`. +4 LoB|ON|
+|STBI_PNM|Enable PNM (.PPM and .PGM) support for `love.graphics.newImage`. +2 KiB|ON|
+
+To use these flags, add them to the end of the first command like this: `-Dname=ON/OFF`. For example, the following command disables PSD and enables TTF:
+
+```
+cmake -B build --toolchain=DJGPP.cmake -DSTBI_PSD=OFF -DLOVE_TTF=ON
+```
+
+Don't forget to clean your `build` folder after changing the build flags!

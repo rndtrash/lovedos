@@ -10,10 +10,13 @@
 #include <string.h>
 
 #include "lib/dmt/dmt.h"
+#ifdef LOVE_TTF
 #include "lib/stb/stb_truetype.h"
+#endif
 #include "filesystem.h"
 #include "font.h"
 
+#ifdef LOVE_TTF
 static const char *initTrueTypeFont(font_t *self, const void *data, int ptsize) {
   int i;
 
@@ -66,6 +69,7 @@ retry:
   /* Return NULL for no error */
   return NULL;
 }
+#endif
 
 const char *font_init(font_t *self, const char *filename, int ptsize) {
   const char *errmsg = NULL;
@@ -82,7 +86,11 @@ const char *font_init(font_t *self, const char *filename, int ptsize) {
   }
 
   /* Init font */
+#ifdef LOVE_TTF
   errmsg = initTrueTypeFont(self, data, ptsize);
+#else
+  errmsg = "TrueType Font support disabled";
+#endif
   if (errmsg) {
     // TODO: Try loading the same font file as BMFont
     goto fail;
