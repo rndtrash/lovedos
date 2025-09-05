@@ -4,6 +4,9 @@ on: [push]
 
 jobs:
   build:
+    strategy:
+      matrix:
+        mini-build: [OFF, ON]
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/volkertb/debian-djgpp:latest
@@ -16,7 +19,7 @@ jobs:
       - run: apt-get update && apt-get install -y cmake libfl2
 
       - name: Setup the DJGPP environment and Configure CMake
-        run: source /opt/djgpp/setenv && cmake -B build --toolchain=DJGPP.cmake
+        run: source /opt/djgpp/setenv && cmake -B build --toolchain=DJGPP.cmake -DLOVEDOS_MINI=${{ matrix.mini-build }}
 
       - name: Compile LoveDOS
         run: cmake --build build
@@ -24,5 +27,5 @@ jobs:
       - name: Upload love.exe
         uses: actions/upload-artifact@v4
         with:
-          name: love
+          name: ${{ matrix.mini-build == 'ON' && 'lovedos-mini' || 'lovedos' }}
           path: build/src/love.exe

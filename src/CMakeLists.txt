@@ -1,5 +1,27 @@
 configure_file(config.h.in config.h)
 
+option(
+    LOVE_TTF
+    "Implement vector fonts parser and renderer in LOVE engine. \
+Disabling this function might free up to 40 KiB from the executable's size, but all calls to love.graphics.newFont will return nil."
+    ON)
+
+option(
+    LOVEDOS_MINI
+    "Make a minimal build of LoveDOS. This option turns off the TTF support, leaves only the support for GIF and PNG bitmaps, and disables certain Lua functions."
+    ON)
+if(LOVEDOS_MINI)
+  set(LUA_LOCALE OFF)
+  set(LOVE_TTF OFF)
+  set(STBI_JPEG OFF)
+  set(STBI_BMP OFF)
+  set(STBI_PSD OFF)
+  set(STBI_TGA OFF)
+  set(STBI_HDR OFF)
+  set(STBI_PIC OFF)
+  set(STBI_PNM OFF)
+endif()
+
 add_subdirectory(embed)
 add_subdirectory(lib)
 

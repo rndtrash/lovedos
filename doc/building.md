@@ -52,4 +52,7 @@ To use these flags, add them to the end of the first command like this: `-Dname=
 cmake -B build --toolchain=DJGPP.cmake -DSTBI_PSD=OFF -DLOVE_TTF=ON
 ```
 
+LoveDOS also offers an all-in-one flag called `LOVEDOS_MINI`, which disables a lot of stuff when turned on.
+More specifically, it turns off `LUA_LOCALE`, `LOVE_TTF`, and leaves PNG and GIF as the only supported image formats.
+
 Don't forget to clean your `build` folder after changing the build flags!
