@@ -68,7 +68,8 @@ add_executable(love
   modules/l_source.c
   modules/l_system.c
   modules/l_timer.c
-  modules/l_vgm.c)
+  modules/l_vgm.c
+  modules/l_dos.c)
 target_include_directories(love PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 target_link_libraries(love
   PRIVATE

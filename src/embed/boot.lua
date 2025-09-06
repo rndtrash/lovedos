@@ -28,7 +28,10 @@ function love.boot()
 
   -- Initialize the config and load conf.lua
   local c = {
-    version = love.getVersion()
+    version = love.getVersion(),
+    dos = {
+      console = nil
+    }
   }
   if love.filesystem.isFile("conf.lua") then
     require("conf")
@@ -36,6 +39,9 @@ function love.boot()
   if love.conf then
     confok, conferr = pcall(love.conf, c)
   end
+
+  -- Init print() console
+  love.dos.setPrintOutput(c.dos.console)
 
   -- Init event handlers table
   local function makewrapper(name)

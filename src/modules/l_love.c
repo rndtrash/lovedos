@@ -26,6 +26,7 @@ int luaopen_timer(lua_State *L);
 int luaopen_keyboard(lua_State *L);
 int luaopen_mouse(lua_State *L);
 int luaopen_vgm(lua_State *L);
+int luaopen_dos(lua_State *L);
 
 int luaopen_love(lua_State *L) {
   int i;
@@ -61,6 +62,7 @@ int luaopen_love(lua_State *L) {
       {"timer", luaopen_timer},
       {"keyboard", luaopen_keyboard},
       {"mouse", luaopen_mouse},
+      {"dos", luaopen_dos},
       {0},
   };
   for (i = 0; mods[i].name; i++) {

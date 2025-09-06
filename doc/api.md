@@ -11,6 +11,7 @@
 * [love.audio](#loveaudio)
 * [love.event](#loveevent)
 * [love.vgm](#lovevgm)
+* [love.dos](#lovedos)
 
 ##### [Objects](#objects-1)
 * [Image](#image)
@@ -37,6 +38,20 @@ Returns the operating system which LoveDOS is running on.
 ##### love.system.getMemUsage()
 Returns the amount of memory in kilobytes which is being used by LoveDOS. This
 includes the memory used by both the loaded assets and lua.
+
+
+### love.dos
+A special namespace for all the custom LoveDOS stuff.
+
+##### love.dos.setPrintOutput(filename)
+Sets the output file for Lua's built-in `print(...)` method. The `filename` can be either
+a real path like `C:\\OUTPUT.LOG` (mind the string escaping) or a so-called Device file
+like `CON` for console (might look garbled in VGA), `COM1`...`COMx` for a serial port,
+or even `PRN`/`LPT1`...`LPTx` for a printer!
+
+To silence the print output, pass a `nil` as an argument.
+
+The file could also be set by the means of [`conf.lua`](conf.md#tdosconsole).
 
 
 ### love.vgm
