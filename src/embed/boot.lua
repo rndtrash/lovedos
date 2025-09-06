@@ -18,6 +18,25 @@ function love.boot()
     end
   end)
 
+  -- Try to mount .exe file, then the first argument
+  for i, v in ipairs { love.argv[1], love.argv[2] } do
+    local mounted = love.filesystem.mount(v)
+    if mounted then
+      break
+    end
+  end
+
+  -- Initialize the config and load conf.lua
+  local c = {
+    version = love.getVersion()
+  }
+  if love.filesystem.isFile("conf.lua") then
+    require("conf")
+  end
+  if love.conf then
+    confok, conferr = pcall(love.conf, c)
+  end
+
   -- Init event handlers table
   local function makewrapper(name)
     return function(...)
@@ -33,14 +52,6 @@ function love.boot()
     ["keyreleased"] = makewrapper("keyreleased"),
     ["textinput"] = makewrapper("textinput"),
    }
-
-  -- Try to mount .exe file, then the first argument
-  for i, v in ipairs { love.argv[1], love.argv[2] } do
-    local mounted = love.filesystem.mount(v)
-    if mounted then
-      break
-    end
-  end
 
   -- Init the save directory - if it doesn't exist (can't be mounted)
   -- love.filesystem.write() is wrapped so that it is only set, created and
